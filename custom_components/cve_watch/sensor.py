@@ -46,7 +46,7 @@ class _Base(CoordinatorEntity[CveWatchCoordinator], SensorEntity):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
             name="CVE Watch",
-            manufacturer="NVD (NIST)",
+            manufacturer="NuklearStriker",
             entry_type=DeviceEntryType.SERVICE,
         )
 
