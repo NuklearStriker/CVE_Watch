@@ -1,7 +1,7 @@
 {
   "domain": "cve_watch",
   "name": "CVE Watch",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "documentation": "https://github.com/NuklearStriker/CVE_Watch",
   "issue_tracker": "https://github.com/NuklearStriker/CVE_Watch/issues",
   "codeowners": [NuklearStriker],
