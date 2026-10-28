@@ -1,0 +1,52 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "CVE Watch",
+        "description": "Applications to monitor (one per line). CVEs are searched by keyword in the NVD database.",
+        "data": {
+          "apps": "Applications",
+          "days": "Period (days)",
+          "min_severity": "Minimum severity",
+          "interval_hours": "Update interval (hours)",
+          "api_key": "NVD API key (optional)"
+        },
+        "data_description": {
+          "apps": "Examples: stormshield, proxmox, home assistant, prtg, wsus",
+          "api_key": "Recommended if you track more than a few applications (much higher rate limits)."
+        }
+      }
+    },
+    "error": {
+      "no_apps": "Enter at least one application."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "CVE Watch",
+        "data": {
+          "apps": "Applications",
+          "days": "Period (days)",
+          "min_severity": "Minimum severity",
+          "interval_hours": "Update interval (hours)",
+          "api_key": "NVD API key (optional)"
+        }
+      }
+    },
+    "error": {
+      "no_apps": "Enter at least one application."
+    }
+  },
+  "selector": {
+    "severity": {
+      "options": {
+        "ALL": "All",
+        "LOW": "Low and above",
+        "MEDIUM": "Medium and above",
+        "HIGH": "High and above",
+        "CRITICAL": "Critical only"
+      }
+    }
+  }
+}

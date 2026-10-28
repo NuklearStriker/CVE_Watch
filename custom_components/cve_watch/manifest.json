@@ -1,0 +1,13 @@
+{
+  "domain": "cve_watch",
+  "name": "CVE Watch",
+  "version": "0.1.0",
+  "documentation": "https://github.com/votre-compte/ha-cve-watch",
+  "issue_tracker": "https://github.com/votre-compte/ha-cve-watch/issues",
+  "codeowners": [],
+  "config_flow": true,
+  "single_config_entry": true,
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "requirements": []
+}
