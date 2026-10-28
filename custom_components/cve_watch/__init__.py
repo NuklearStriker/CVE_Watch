@@ -14,7 +14,7 @@ from .coordinator import CveWatchCoordinator
 PLATFORMS = ["sensor"]
 
 CARD_URL = f"/{DOMAIN}/cve-watch-card.js"
-CARD_VERSION = "0.3.0"
+CARD_VERSION = "1.0.0"
 _FRONTEND_FLAG = f"{DOMAIN}_frontend"
 
 
