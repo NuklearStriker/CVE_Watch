@@ -2,6 +2,17 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), versionnage [SemVer](https://semver.org/lang/fr/).
 
+## [0.3.0] - 2026-10-28
+
+### Ajouté
+- Carte Lovelace dédiée `custom:cve-watch-card`, remplaçant avantageusement le tableau Markdown : pastille de score colorée par sévérité, étiquettes KEV / exploit / CWE, ancienneté, produits, détail dépliable au clic, thème clair/sombre.
+- Options de la carte : `entity`, `title`, `max`, `min_score`.
+- Enregistrement automatique de la carte par l'intégration (fichier servi sur `/cve_watch/cve-watch-card.js`, aucune ressource à déclarer à la main).
+
+### Modifié
+- Dépendances `http` et `frontend` déclarées dans le `manifest.json`.
+- Le tableau Markdown reste documenté comme alternative.
+
 ## [0.2.0] - 2026-10-28
 
 ### Ajouté
