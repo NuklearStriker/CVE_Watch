@@ -83,7 +83,7 @@ entity: sensor.cve_watch_stormshield
 | `max` | `10` | Nombre de CVE affichées (25 au maximum, limite des attributs) |
 | `min_score` | `0` | Masque les CVE sous ce score CVSS |
 
-Chaque ligne affiche une pastille de score colorée (critique / élevée / moyenne / faible), l'identifiant (lien NVD), le titre, les étiquettes KEV / exploit / CWE, l'ancienneté et les produits. Un clic sur la ligne déplie le détail (description, vecteur CVSS, statut, action CISA…). Le style suit le thème de Home Assistant (clair ou sombre).
+Chaque ligne affiche une pastille de score colorée (critique / élevée / moyenne / faible), l'identifiant (lien NVD), le titre, les étiquettes KEV / exploit / CWE, l'ancienneté et les produits. Le sélecteur intégré permet de trier par score CVSS décroissant (défaut) ou par date de publication, de la plus récente à la plus ancienne. Un clic sur la ligne déplie le détail (description, vecteur CVSS, statut, action CISA…). Le style suit le thème de Home Assistant (clair ou sombre).
 
 ## Alternative : tableau Markdown
 
