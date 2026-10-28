@@ -50,14 +50,37 @@ action:
         {{ c.id }} (CVSS {{ c.score }}) – {{ c.summary }}
 ```
 
-## Exemple de carte Lovelace (Markdown)
+## Champs disponibles pour chaque CVE (attribut `cves`)
+
+| Champ | Contenu |
+|---|---|
+| `id`, `url` | Identifiant CVE et lien NVD |
+| `title` | Nom CISA KEV si connu, sinon première phrase de la description (NVD ne fournit pas de titre) |
+| `score`, `severity` | Score CVSS de base et sévérité |
+| `cvss_version`, `vector` | Version (4.0 / 3.1 / 3.0 / 2.0) et vecteur d'attaque |
+| `published`, `modified` | Dates de publication et de dernière modification |
+| `status` | Statut NVD (Analyzed, Awaiting Analysis…) |
+| `cwe` | Types de faiblesse (CWE-xxx) |
+| `products` | Éditeur / produit concernés (d'après les CPE, 5 max) |
+| `kev`, `kev_due_date`, `kev_action` | Présence au catalogue CISA KEV, échéance et action requise |
+| `public_exploit` | Une référence « Exploit » existe |
+| `references` | Nombre de références |
+| `summary` | Description (300 caractères) |
+
+## Exemple de carte Lovelace : tableau (Markdown)
 
 ```yaml
 type: markdown
 title: CVE – Stormshield
 content: >
-  {% for c in state_attr('sensor.cve_watch_stormshield', 'cves') %}
-  - **[{{ c.id }}]({{ c.url }})** · {{ c.severity }} {{ c.score }}{{ ' · 🔥 KEV' if c.kev }}
-    {{ c.summary }}
+  {% set cves = state_attr('sensor.cve_watch_stormshield', 'cves') or [] %}
+  | CVE | Score | Titre | Produits | Publiée | Infos |
+  |---|---|---|---|---|---|
+  {% for c in cves -%}
+  | [{{ c.id }}]({{ c.url }}) | **{{ c.score }}** {{ c.severity }} | {{ c.title }} | {{ c.products | join(', ') }} | {{ c.published }} | {{ '🔥KEV ' if c.kev }}{{ '💣exploit ' if c.public_exploit }}{{ c.cwe | join(' ') }} |
   {% endfor %}
 ```
+
+Pour tout voir d'un coup (toutes applications), utilisez `sensor.cve_watch_total` avec le champ `application` en plus.
+
+Pour une vue brute, *Outils de développement → États* affiche tous les attributs.
