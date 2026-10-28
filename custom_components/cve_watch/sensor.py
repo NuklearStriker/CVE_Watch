@@ -82,6 +82,7 @@ class CveAppSensor(_Base):
             "critical": sum(c["severity"] == "CRITICAL" for c in cves),
             "high": sum(c["severity"] == "HIGH" for c in cves),
             "kev": sum(c["kev"] for c in cves),
+            "public_exploit": sum(c["public_exploit"] for c in cves),
             "cves": cves[:MAX_CVES_IN_ATTRIBUTES],
         }
 
