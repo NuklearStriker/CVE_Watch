@@ -34,20 +34,53 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-def _extract_cvss(cve: dict[str, Any]) -> tuple[float | None, str]:
-    """Retourne (score, sévérité) en préférant CVSS 4.0 > 3.1 > 3.0 > 2.0."""
+def _extract_cvss(cve: dict[str, Any]) -> dict[str, Any]:
+    """Retourne score, sévérité, version et vecteur (CVSS 4.0 > 3.1 > 3.0 > 2.0)."""
     metrics = cve.get("metrics", {})
-    for key in ("cvssMetricV40", "cvssMetricV31", "cvssMetricV30", "cvssMetricV2"):
+    for key, version in (
+        ("cvssMetricV40", "4.0"),
+        ("cvssMetricV31", "3.1"),
+        ("cvssMetricV30", "3.0"),
+        ("cvssMetricV2", "2.0"),
+    ):
         entries = metrics.get(key)
         if not entries:
             continue
         # On préfère l'évaluation "Primary" (NVD) si elle existe.
         entry = next((e for e in entries if e.get("type") == "Primary"), entries[0])
         data = entry.get("cvssData", {})
-        score = data.get("baseScore")
         severity = data.get("baseSeverity") or entry.get("baseSeverity") or "NONE"
-        return score, str(severity).upper()
-    return None, "NONE"
+        return {
+            "score": data.get("baseScore"),
+            "severity": str(severity).upper(),
+            "cvss_version": version,
+            "vector": data.get("vectorString"),
+        }
+    return {"score": None, "severity": "NONE", "cvss_version": None, "vector": None}
+
+
+def _first_sentence(text: str, limit: int = 110) -> str:
+    text = " ".join(text.split())
+    cut = text.find(". ")
+    title = text[: cut + 1] if 0 < cut <= limit else text
+    return title if len(title) <= limit else title[: limit - 1].rstrip() + "…"
+
+
+def _products(cve: dict[str, Any], limit: int = 5) -> list[str]:
+    """Extrait 'éditeur produit' depuis les CPE des configurations."""
+    found: dict[str, None] = {}
+
+    def walk(nodes: list[dict[str, Any]]) -> None:
+        for node in nodes:
+            for match in node.get("cpeMatch", []):
+                parts = match.get("criteria", "").split(":")
+                if len(parts) > 4 and match.get("vulnerable", True):
+                    found.setdefault(f"{parts[3]} {parts[4]}".replace("_", " "), None)
+            walk(node.get("nodes", []))
+
+    for conf in cve.get("configurations", []):
+        walk(conf.get("nodes", []))
+    return list(found)[:limit]
 
 
 def _parse_cve(raw: dict[str, Any]) -> dict[str, Any]:
@@ -56,18 +89,39 @@ def _parse_cve(raw: dict[str, Any]) -> dict[str, Any]:
         (d["value"] for d in cve.get("descriptions", []) if d.get("lang") == "en"),
         "",
     )
-    score, severity = _extract_cvss(cve)
     summary = " ".join(description.split())
     if len(summary) > SUMMARY_LENGTH:
         summary = summary[: SUMMARY_LENGTH - 1] + "…"
+
+    cwes = sorted(
+        {
+            d["value"]
+            for w in cve.get("weaknesses", [])
+            for d in w.get("description", [])
+            if d.get("value", "").startswith("CWE-")
+        }
+    )
+    refs = cve.get("references", [])
+    has_exploit = any("Exploit" in r.get("tags", []) for r in refs)
+    cve_id = cve.get("id")
+
     return {
-        "id": cve.get("id"),
-        "published": cve.get("published"),
-        "score": score,
-        "severity": severity,
+        "id": cve_id,
+        # NVD n'a pas de titre : nom CISA KEV si dispo, sinon 1re phrase.
+        "title": cve.get("cisaVulnerabilityName") or _first_sentence(description),
+        **_extract_cvss(cve),
+        "published": (cve.get("published") or "")[:10],
+        "modified": (cve.get("lastModified") or "")[:10],
+        "status": cve.get("vulnStatus"),
+        "cwe": cwes,
+        "products": _products(cve),
         "kev": bool(cve.get("cisaExploitAdd")),
+        "kev_due_date": cve.get("cisaActionDue"),
+        "kev_action": cve.get("cisaRequiredAction"),
+        "public_exploit": has_exploit,
+        "references": len(refs),
         "summary": summary,
-        "url": f"https://nvd.nist.gov/vuln/detail/{cve.get('id')}",
+        "url": f"https://nvd.nist.gov/vuln/detail/{cve_id}",
     }
 
 
