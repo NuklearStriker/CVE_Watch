@@ -2,6 +2,11 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), versionnage [SemVer](https://semver.org/lang/fr/).
 
+## [1.0.0] - 2026-10-28
+
+### Released
+- Publication de la V.1.0.0
+
 ## [0.3.0] - 2026-10-28
 
 ### Ajouté
