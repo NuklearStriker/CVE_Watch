@@ -12,7 +12,7 @@
           "api_key": "Clé API NVD (optionnelle)"
         },
         "data_description": {
-          "apps": "Exemples : stormshield, proxmox, home assistant, prtg, wsus",
+          "apps": "Exemples : Nginx, proxmox, home assistant",
           "api_key": "Recommandée si vous suivez plus de quelques applications (quotas bien plus élevés)."
         }
       }
