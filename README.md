@@ -67,7 +67,25 @@ action:
 | `references` | Nombre de références |
 | `summary` | Description (300 caractères) |
 
-## Exemple de carte Lovelace : tableau (Markdown)
+## Carte Lovelace « CVE Watch » (incluse)
+
+La carte est servie et chargée automatiquement par l'intégration : après installation et redémarrage, faites un rafraîchissement forcé du navigateur (Ctrl+F5) ; elle apparaît dans le sélecteur de cartes sous le nom **CVE Watch**.
+
+```yaml
+type: custom:cve-watch-card
+entity: sensor.cve_watch_stormshield
+```
+
+| Option | Défaut | Rôle |
+|---|---|---|
+| `entity` | (obligatoire) | Capteur par application ou `sensor.cve_watch_total` |
+| `title` | `CVE – <application>` | Titre de la carte |
+| `max` | `10` | Nombre de CVE affichées (25 au maximum, limite des attributs) |
+| `min_score` | `0` | Masque les CVE sous ce score CVSS |
+
+Chaque ligne affiche une pastille de score colorée (critique / élevée / moyenne / faible), l'identifiant (lien NVD), le titre, les étiquettes KEV / exploit / CWE, l'ancienneté et les produits. Un clic sur la ligne déplie le détail (description, vecteur CVSS, statut, action CISA…). Le style suit le thème de Home Assistant (clair ou sombre).
+
+## Alternative : tableau Markdown
 
 ```yaml
 type: markdown
