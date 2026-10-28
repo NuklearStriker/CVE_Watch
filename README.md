@@ -21,7 +21,7 @@ Tout se modifie ensuite via *Configurer* sur l'intégration.
 ## Entités
 
 - `sensor.cve_watch_<application>` : nombre de CVE sur la période.
-  Attributs : `max_score`, `max_severity`, `critical`, `high`, `kev`, `cves` (les 10 premières : id, score, sévérité, date, résumé, lien NVD).
+  Attributs : `max_score`, `max_severity`, `critical`, `high`, `kev`, `cves` (les 25 premières : id, score, sévérité, date, résumé, lien NVD).
 - `sensor.cve_watch_total` : total tous produits confondus, avec `per_application`.
 
 Les CVE sont triées : présentes dans le catalogue CISA KEV d'abord, puis par score CVSS décroissant.
