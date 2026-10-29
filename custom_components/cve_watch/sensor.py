@@ -12,7 +12,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN, MAX_CVES_IN_ATTRIBUTES, SEVERITY_RANK
-from .coordinator import CveWatchCoordinator
+from .coordinator import CveWatchCoordinator, select_cves
 
 
 def _slug(value: str) -> str:
@@ -83,7 +83,7 @@ class CveAppSensor(_Base):
             "high": sum(c["severity"] == "HIGH" for c in cves),
             "kev": sum(c["kev"] for c in cves),
             "public_exploit": sum(c["public_exploit"] for c in cves),
-            "cves": cves[:MAX_CVES_IN_ATTRIBUTES],
+            "cves": select_cves(cves, MAX_CVES_IN_ATTRIBUTES),
         }
 
 
@@ -116,5 +116,5 @@ class CveTotalSensor(_Base):
             "per_application": {app: len(cves) for app, cves in data.items()},
             "max_severity": _worst(merged),
             "kev": sum(c["kev"] for c in merged),
-            "cves": merged[:MAX_CVES_IN_ATTRIBUTES],
+            "cves": select_cves(merged, MAX_CVES_IN_ATTRIBUTES),
         }
