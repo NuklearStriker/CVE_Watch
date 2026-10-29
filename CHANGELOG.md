@@ -2,6 +2,17 @@
 
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), versionnage [SemVer](https://semver.org/lang/fr/).
 
+## [1.1.0] - 2026-10-29
+
+### Ajouté
+- Paramètre `sort` de la carte (`score` par défaut, ou `date`) pour choisir l'ordre d'affichage ; le sélecteur « Trier par » de l'en-tête démarre sur cette valeur.
+
+### Modifié
+- Le tri est appliqué **avant** la limite `max`, dont la valeur par défaut passe de 10 à 25.
+- L'attribut `cves` des capteurs contient désormais l'union des 25 CVE les mieux classées (KEV, score) et des 25 plus récentes (50 au maximum). Le tri par date affiche donc réellement les CVE les plus récentes, et plus seulement celles du haut du classement par score.
+- Tri par défaut de la carte rétabli comme documenté : KEV d'abord, puis score décroissant, puis date.
+- `CARD_VERSION` passe à 1.1.0 pour forcer le rechargement de la carte dans le navigateur.
+
 ## [1.0.0] - 2026-10-28
 
 ### Released
