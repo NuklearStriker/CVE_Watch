@@ -125,6 +125,24 @@ def _parse_cve(raw: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def select_cves(cves: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    """Union des `limit` CVE les mieux classées (KEV, score) et des `limit` plus récentes.
+
+    `cves` doit déjà être trié par (KEV, score, date) décroissants. La carte peut
+    ainsi trier par score ou par date puis appliquer `max` sans rien perdre tant
+    que max <= limit.
+    """
+    by_date = sorted(cves, key=lambda c: c.get("published") or "", reverse=True)
+    out: list[dict[str, Any]] = []
+    seen: set[tuple[Any, Any]] = set()
+    for cve in cves[:limit] + by_date[:limit]:
+        key = (cve.get("application"), cve.get("id"))
+        if key not in seen:
+            seen.add(key)
+            out.append(cve)
+    return out
+
+
 class CveWatchCoordinator(DataUpdateCoordinator[dict[str, list[dict[str, Any]]]]):
     """Récupère les CVE récentes pour chaque application."""
 
