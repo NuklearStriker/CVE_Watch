@@ -25,5 +25,7 @@ MAX_DAYS = 120
 SEVERITY_RANK = {"NONE": 0, "LOW": 1, "MEDIUM": 2, "HIGH": 3, "CRITICAL": 4}
 SEVERITY_OPTIONS = ["ALL", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
 
+# Nombre de CVE gardées par ordre de tri (score, puis date) dans l'attribut `cves`.
+# L'attribut contient l'union des deux listes : 50 CVE au maximum.
 MAX_CVES_IN_ATTRIBUTES = 25
 SUMMARY_LENGTH = 300
