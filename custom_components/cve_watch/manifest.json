@@ -1,14 +1,19 @@
 {
   "domain": "cve_watch",
   "name": "CVE Watch",
-  "version": "1.0.0",
-  "documentation": "https://github.com/NuklearStriker/CVE_Watch",
-  "issue_tracker": "https://github.com/NuklearStriker/CVE_Watch/issues",
-  "codeowners": ["@NuklearStriker"],
+  "codeowners": [
+    "@NuklearStriker"
+  ],
   "config_flow": true,
-  "dependencies": ["http", "frontend"],
-  "single_config_entry": true,
+  "dependencies": [
+    "http",
+    "frontend"
+  ],
+  "documentation": "https://github.com/NuklearStriker/CVE_Watch",
   "integration_type": "service",
   "iot_class": "cloud_polling",
-  "requirements": []
+  "issue_tracker": "https://github.com/NuklearStriker/CVE_Watch/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "1.1.0"
 }
