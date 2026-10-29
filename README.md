@@ -21,10 +21,12 @@ Tout se modifie ensuite via *Configurer* sur l'intégration.
 ## Entités
 
 - `sensor.cve_watch_<application>` : nombre de CVE sur la période.
-  Attributs : `max_score`, `max_severity`, `critical`, `high`, `kev`, `cves` (les 25 premières : id, score, sévérité, date, résumé, lien NVD).
+  Attributs : `max_score`, `max_severity`, `critical`, `high`, `kev`, `public_exploit`, `cves` (liste détaillée, voir ci-dessous).
 - `sensor.cve_watch_total` : total tous produits confondus, avec `per_application`.
 
-Les CVE sont triées : présentes dans le catalogue CISA KEV d'abord, puis par score CVSS décroissant.
+Les CVE sont triées : présentes dans le catalogue CISA KEV d'abord, puis par score CVSS décroissant, puis par date.
+
+L'attribut `cves` contient l'union des **25 CVE les mieux classées** (KEV, score) et des **25 plus récentes**, soit 50 au maximum. La carte peut ainsi les trier par score ou par date puis appliquer sa limite `max` sans rien perdre, tant que `max` ≤ 25. Le compteur (état du capteur) porte toujours sur l'ensemble des CVE de la période.
 
 ## Limites à connaître
 
@@ -74,16 +76,19 @@ La carte est servie et chargée automatiquement par l'intégration : après inst
 ```yaml
 type: custom:cve-watch-card
 entity: sensor.cve_watch_stormshield
+sort: date   # ou « score » (défaut)
+max: 10      # 25 par défaut
 ```
 
 | Option | Défaut | Rôle |
 |---|---|---|
 | `entity` | (obligatoire) | Capteur par application ou `sensor.cve_watch_total` |
 | `title` | `CVE – <application>` | Titre de la carte |
-| `max` | `10` | Nombre de CVE affichées (25 au maximum, limite des attributs) |
+| `sort` | `score` | Tri : `score` (KEV d'abord, puis score décroissant, puis date) ou `date` (les plus récentes d'abord) |
+| `max` | `25` | Nombre de CVE affichées, appliqué **après** le tri. Au-delà de 25, la liste peut être incomplète |
 | `min_score` | `0` | Masque les CVE sous ce score CVSS |
 
-Chaque ligne affiche une pastille de score colorée (critique / élevée / moyenne / faible), l'identifiant (lien NVD), le titre, les étiquettes KEV / exploit / CWE, l'ancienneté et les produits. Le sélecteur intégré permet de trier par score CVSS décroissant (défaut) ou par date de publication, de la plus récente à la plus ancienne. Un clic sur la ligne déplie le détail (description, vecteur CVSS, statut, action CISA…). Le style suit le thème de Home Assistant (clair ou sombre).
+Chaque ligne affiche une pastille de score colorée (critique / élevée / moyenne / faible), l'identifiant (lien NVD), le titre, les étiquettes KEV / exploit / CWE, l'ancienneté et les produits. Le sélecteur « Trier par » dans l'en-tête permet de changer l'ordre à la volée ; il démarre sur la valeur du paramètre `sort`. Un clic sur la ligne déplie le détail (description, vecteur CVSS, statut, action CISA…). Le style suit le thème de Home Assistant (clair ou sombre).
 
 ## Alternative : tableau Markdown
 
